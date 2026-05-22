@@ -1,0 +1,16 @@
+id,nombre,precio,detalle,marca,estado,cupos
+1,Baño y Corte,45000,Baño profundo y corte de pelo según raza,PetGroom,activo,10
+2,Vacuna Rabia,25000,Aplicación de vacuna anual,BioZoo,activo,10
+3,Baño y Corte,45000,Baño profundo y corte de pelo según raza,PetGroom,activo,10
+4,Spa Relajante,80000,Masajes y aceites para mascotas,ZenPet,activo,10
+5,Spa Relajante,80000,Masajes y aceites para mascotas,ZenPet,activo,10
+6,Spa Relajante,80000,Masajes y aceites para mascotas,ZenPet,activo,10
+7,Spa Relajante,80000,Masajes y aceites para mascotas,ZenPet,activo,10
+8,Corte de Uñas,15000,Pedicura canina y felina,PetGroom,activo,10
+9,Vacuna Rabia,25000,Aplicación de vacuna anual,BioZoo,activo,10
+10,Baño y Corte,45000,Baño profundo y corte de pelo según raza,PetGroom,activo,10
+11,Vacuna Rabia,25000,Aplicación de vacuna anual,BioZoo,activo,10
+12,Corte de Uñas,15000,Pedicura canina y felina,PetGroom,activo,10
+13,Limpieza Dental,60000,Profilaxis básica,HealthPet,activo,10
+14,Corte de Uñas,15000,Pedicura canina y felina,PetGroom,activo,10
+15,Baño y Corte,45000,Baño profundo y corte de pelo según raza,PetGroom,activo,10

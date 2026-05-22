@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuestros Servicios - Pequeñas Huellas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    .navbar {
+      background-color: #1a2a6c !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .page-title {
+      color: #1a2a6c;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    .service-card {
+      border: none;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      background: white;
+      height: 100%;
+      overflow: hidden;
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
+    .card-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .price-circle {
+      width: 80px;
+      height: 80px;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .service-name {
+      color: #1a2a6c;
+      font-weight: 600;
+      min-height: 50px;
+    }
+    .brand-text {
+      color: #6c757d;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .btn-buy {
+      background: #1a2a6c;
+      color: white;
+      border-radius: 10px;
+      width: 100%;
+      font-weight: 600;
+      padding: 10px;
+      margin-top: 15px;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn-buy:hover { background: #2a3a8c; color: white; }
+    .btn-disabled { opacity: .55; pointer-events: none; }
+
+    .admin-controls {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    .btn-admin-pill {
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 20px;
+      transition: all 0.2s;
+    }
+    .btn-admin-pill:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .btn-admin-edit { color: #0d6efd; border-color: #0d6efd; }
+    .btn-admin-edit:hover { background-color: #0d6efd; color: white; }
+    .btn-admin-delete { color: #dc3545; border-color: #dc3545; }
+    .btn-admin-delete:hover { background-color: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark mb-5">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">🐾 Pequeñas Huellas</a>
+    <div class="ms-auto d-flex gap-2 align-items-center">
+      <div id="user-menu" class="d-flex gap-2"></div>
+      <button class="btn btn-sm btn-danger px-3 fw-bold rounded-pill" id="btnLogOut">Cerrar Sesión</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="text-center mb-5">
+    <h1 class="page-title">Catálogo de Servicios</h1>
+    <div id="status-badge-container" class="mb-3"></div>
+    
+    <div id="admin-header" style="display: none;" class="mt-3">
+        <a href="insertar_producto.html" class="btn btn-success rounded-pill px-4 shadow-sm fw-bold">
+            <i class="bi bi-plus-circle me-1"></i> Agregar Nuevo Servicio
+        </a>
+        <a href="ver_reservas.html" class="btn btn-warning rounded-pill px-4 shadow-sm ms-2 fw-bold text-dark">
+            <i class="bi bi-clipboard-data me-1"></i> Gestión de Reservas
+        </a>
+    </div>
+  </div>
+
+  <div id="servicios-container" class="row g-4 pb-5">
+      <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p>Sincronizando catálogo...</p>
+      </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'http://192.168.100.2:3000/api/productos';
+  const userRol = localStorage.getItem('rol'); 
+
+  const menuContenedor = document.getElementById('user-menu');
+  const statusBadge = document.getElementById('status-badge-container');
+
+  // LÓGICA DE NAVEGACIÓN Y ROL
+  if (userRol === 'admin') {
+      document.getElementById('admin-header').style.display = 'block';
+      statusBadge.innerHTML = `<span class="badge bg-dark text-white p-2 px-3 rounded-pill">MODO ADMINISTRADOR</span>`;
+      
+      // REDIRECCIÓN CORREGIDA A admin_gestion.html
+      menuContenedor.innerHTML = `
+        <a class="btn btn-sm btn-outline-info text-white px-3 fw-bold rounded-pill" href="admin_gestion.html">
+          <i class="bi bi-speedometer2 me-1"></i> Volver al Panel
+        </a>`;
+  } else {
+      statusBadge.innerHTML = `<p class="text-muted">Selecciona el mejor cuidado para tu compañero fiel</p>`;
+      menuContenedor.innerHTML = `
+        <a class="btn btn-sm btn-outline-light px-3 fw-bold rounded-pill" href="mis_compras.html">
+          🛍️ Mis Reservas
+        </a>`;
+  }
+
+  document.getElementById('btnLogOut').addEventListener('click', () => {
+    if(confirm("¿Deseas finalizar la sesión actual?")){
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+  });
+
+  // Carga de productos...
+  fetch(API_URL)
+    .then(r => r.json())
+    .then(data => {
+      const container = document.getElementById('servicios-container');
+      container.innerHTML = '';
+
+      data.forEach(servicio => {
+        const b = badgeEstado(servicio.estado);
+        const reservable = puedeReservar(servicio);
+        const precioFormateado = Number(servicio.precio).toFixed(2).replace(/\.00$/, '');
+
+        let footerHtml = '';
+
+        if (userRol === 'admin') {
+            footerHtml = `
+                <div class="admin-controls">
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="editar_producto.html?id=${servicio.id}" class="btn btn-admin-pill btn-admin-edit shadow-sm border">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button onclick="confirmarEliminar(${servicio.id})" class="btn btn-admin-pill btn-admin-delete shadow-sm border">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            const hrefReserva = `crear_reserva.html?id=${servicio.id}&nombre=${encodeURIComponent(servicio.nombre)}&precio=${servicio.precio}`;
+            footerHtml = reservable
+              ? `<a class="btn-buy shadow-sm" href="${hrefReserva}">Reservar</a>`
+              : `<a class="btn-buy btn-disabled shadow-sm" href="#">No disponible</a>`;
+        }
+
+        const cardHtml = `
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card service-card shadow-sm p-3 position-relative">
+              <span class="card-badge ${b.cls}">${b.text}</span>
+              <div class="card-body">
+                <div class="price-circle">$${precioFormateado}</div>
+                <h5 class="service-name mb-1 fw-bold">${servicio.nombre}</h5>
+                <p class="brand-text mb-2 text-primary">Marca: ${servicio.marca ?? '-'}</p>
+                <p class="text-muted small" style="min-height: 40px;">${servicio.detalle ?? 'Servicio especializado.'}</p>
+                <div class="d-flex justify-content-end mt-3 text-muted mb-3" style="font-size: 0.8rem; border-top: 1px solid #f0f0f0; padding-top: 8px;">
+                  <span>Cupos: <b>${servicio.cupos ?? '0'}</b></span>
+                </div>
+                ${footerHtml}
+              </div>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    })
+    .catch(err => {
+      document.getElementById('servicios-container').innerHTML = `<div class="alert alert-danger text-center">Error al conectar con el servidor.</div>`;
+    });
+
+  function badgeEstado(estado) {
+    const e = String(estado || '').toLowerCase();
+    if (e === 'activo') return { text: 'ACTIVO', cls: 'bg-success text-white' };
+    if (e === 'inhabilitado') return { text: 'INHABILITADO', cls: 'bg-danger text-white' };
+    return { text: e || 'SIN ESTADO', cls: 'bg-warning text-dark' };
+  }
+
+  function puedeReservar(servicio) {
+    const estado = String(servicio.estado || '').toLowerCase();
+    const cupos = Number(servicio.cupos);
+    return estado === 'activo' && Number.isFinite(cupos) && cupos > 0;
+  }
+
+  async function confirmarEliminar(id) {
+      if (confirm(`¿Eliminar servicio #${id}?`)) {
+          try {
+              const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+              if (res.ok) location.reload();
+          } catch (error) { alert("Error al eliminar."); }
+      }
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

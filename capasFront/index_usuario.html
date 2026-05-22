@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Reservas PETSHOP - Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 45%, #ffffff 100%);
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #3d8bfd);
+      box-shadow: 0 10px 25px rgba(13, 110, 253, 0.18);
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-card {
+      border: none;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(31, 45, 61, 0.12);
+      background: #fff;
+    }
+
+    .hero-header {
+      background: linear-gradient(135deg, #0d6efd, #5b9cff);
+      color: white;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+
+    .hero-header h1 {
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-header p {
+      margin-bottom: 0;
+      font-size: 1.05rem;
+      opacity: 0.95;
+    }
+
+    .hero-body {
+      padding: 2.2rem;
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: #1f2d3d;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-text {
+      color: #5b6470;
+      margin-bottom: 1.8rem;
+    }
+
+    .option-card {
+      border: 1px solid #e9eef5;
+      border-radius: 18px;
+      padding: 1.2rem;
+      height: 100%;
+      transition: all 0.25s ease;
+      background: #ffffff;
+    }
+
+    .option-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(31, 45, 61, 0.10);
+      border-color: #d9e6ff;
+    }
+
+    .option-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .option-card h5 {
+      font-weight: 700;
+      color: #1f2d3d;
+    }
+
+    .option-card p {
+      color: #6c757d;
+      min-height: 48px;
+      margin-bottom: 1rem;
+    }
+
+    .btn-custom {
+      border-radius: 12px;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #6c757d;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index_usuario.html">👥 Gestión de RESERVAS PETSHOP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="admin_gestion.html">Volver al panel</a></li>          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="hero-card">
+      <div class="hero-header">
+        <h1>Microservicio de Usuarios</h1>
+        <p>Administra la información de los usuarios de manera rápida, ordenada y visual.</p>
+      </div>
+
+      <div class="hero-body">
+        <div class="text-center mb-4">
+          <h3 class="section-title">Panel principal</h3>
+          <p class="section-text">
+            Desde aquí puedes registrar, consultar, editar, listar y eliminar usuarios conectándote a tu API REST.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="option-card">
+              <span class="option-icon">📋</span>
+              <h5>Ver usuarios</h5>
+              <p>Visualiza todos los usuarios registrados en una tabla clara y organizada.</p>
+              <a href="ver_usuarios.html" class="btn btn-outline-primary btn-custom w-100">Ir a ver usuarios</a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="option-card">
+              <span class="option-icon">➕</span>
+              <h5>Insertar usuario</h5>
+              <p>Agrega un nuevo usuario con sus datos principales desde un formulario.</p>
+              <a href="insertar_usuario.html" class="btn btn-outline-success btn-custom w-100">Ir a insertar</a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <div class="option-card">
+              <span class="option-icon">🔍</span>
+              <h5>Consultar usuario</h5>
+              <p>Busca un usuario específico por su identificador y revisa su información.</p>
+              <a href="consultar_usuario.html" class="btn btn-outline-info btn-custom w-100">Ir a consultar</a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-6">
+            <div class="option-card">
+              <span class="option-icon">✏️</span>
+              <h5>Editar usuario</h5>
+              <p>Actualiza los datos de un usuario existente de manera sencilla.</p>
+              <a href="editar_usuario.html" class="btn btn-outline-warning btn-custom w-100">Ir a editar</a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-6">
+            <div class="option-card">
+              <span class="option-icon">🗑️</span>
+              <h5>Eliminar usuario</h5>
+              <p>Elimina un usuario del sistema usando su ID y confirma la operación.</p>
+              <a href="borrar_usuario.html" class="btn btn-outline-danger btn-custom w-100">Ir a eliminar</a>
+            </div>
+          </div>
+        </div>
+
+        
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

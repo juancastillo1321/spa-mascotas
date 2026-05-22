@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # BASE DE DATOS UNIFICADA
+  # ==========================================
+  db:
+    image: mysql:8.0
+    container_name: mascotas_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Titoelgato0809
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+    networks:
+      - red-almacen
+
+  # ==========================================
+  # BALANCEADOR DE CARGA (HAProxy)
+  # ==========================================
+  haproxy:
+    image: juandevia06/haproxy-almacen:latest
+    networks:
+      - red-almacen
+    ports:
+      - target: 80
+        published: 5090
+        protocol: tcp
+        mode: ingress
+      - target: 8404
+        published: 8404
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    deploy:
+      placement:
+        constraints: 
+          - node.role == manager
+    depends_on:
+      - usuarios
+      - servicios
+      - ordenes
+      - frontend
+
+  # ==========================================
+  # MICROSERVICIO: USUARIOS
+  # ==========================================
+  usuarios:
+    image: titoelgato/micro-usuarios:latest
+    build: ./Usuarios
+    container_name: microservicios-usuarios-1
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=Titoelgato0809
+      - DB_NAME=capasAlmacen
+    networks:
+      - red-almacen
+
+  # ==========================================
+  # MICROSERVICIO: SERVICIOS
+  # ==========================================
+  servicios:
+    image: titoelgato/micro-servicios:latest
+    build: ./Servicios
+    container_name: microservicios-servicios-1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=Titoelgato0809
+      - DB_NAME=almacenServicios
+    networks:
+      - red-almacen
+
+  # ==========================================
+  # MICROSERVICIO: ÓRDENES
+  # ==========================================
+  ordenes:
+    image: titoelgato/micro-ordenes:latest
+    build: ./ordenes
+    container_name: microservicios-ordenes-1
+    ports:
+      - "3003:3003"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=Titoelgato0809
+      - DB_NAME=almacenOrdenes
+    networks:
+      - red-almacen
+
+  # ==========================================
+  # SERVIDOR FRONTEND (Apache + PHP)
+  # ==========================================
+  frontend:
+    image: juandevia06/frontend-almacen
+    volumes:
+      - ../capasFront:/var/www/html2
+    networks:
+      - red-almacen
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+# ==========================================
+# CONFIGURACIÓN DE RED Y VOLÚMENES
+# ==========================================
+networks:
+  red-almacen: 
+    driver: overlay
+    attachable: true
+
+volumes:
+  db_data:

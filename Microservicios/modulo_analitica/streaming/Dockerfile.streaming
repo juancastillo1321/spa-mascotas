@@ -1,0 +1,11 @@
+FROM apache/spark:3.5.1
+
+WORKDIR /app
+
+COPY . /app
+
+USER root
+
+RUN pip install pyspark
+
+CMD ["sleep", "infinity"]
