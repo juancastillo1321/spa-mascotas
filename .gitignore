@@ -1,0 +1,4 @@
+*.tar 
+*.box 
+node_modules/ 
+.vagrant/ 
